@@ -1,3 +1,8 @@
-import { type RouteConfig, index } from "@react-router/dev/routes";
+import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
-export default [index("routes/home.tsx")] satisfies RouteConfig;
+export default [
+  index("routes/home.tsx"),
+  route("auth/google/callback", "routes/auth.callback.ts"),
+  route("channel-sections", "routes/channel-sections.ts"),
+  route("auth/google/refresh", "routes/refresh-token.ts"),
+] satisfies RouteConfig;

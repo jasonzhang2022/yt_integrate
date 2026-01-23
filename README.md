@@ -1,87 +1,25 @@
-# Welcome to React Router!
+# Introduction 
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Basic flow to demonstrate how app cloud use YT V3 Data API
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
+# Steps
+1. Create a Cloud project
+   1. Enable 'YouTube v3 Data API'
+   1. Create an OAuth client ID
+      1. Authorized Javascript origin: http://localhost:5173
+      1. Authorized redirect URIs: http://localhost:5173/auth/google/callback. 
+      1. Write down client id and client secret
+    1 Config OAuth conent screen-> Audience
+      1. Publishing status:test
+      1. Add a new Test User you will use for testing
+1. Clone this repo
+1. Create  a local .env which has two variables.
 
 ```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+CLIENT_ID=the value above 
+CLIENT_SECRET= the value above
 ```
 
-## Styling
+1. npm run dev
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
