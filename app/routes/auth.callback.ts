@@ -41,25 +41,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
     
     console.log("Tokens saved in server memory");
 
-    // 3. Fetch Channel Info using the new Access Token
-    const youtube = google.youtube({ version: "v3", auth: oauth2Client });
-    const channelResponse = await youtube.channels.list({
-      part: ["snippet"],
-      mine: true,
-    });
-
-    const channelData = channelResponse.data;
-
-    let channelName = null;
-    if (channelData.items && channelData.items.length > 0) {
-      channelName = channelData.items[0].snippet.title;
-    }
-
-    if (channelName) {
-      return redirect(`/?channel=${encodeURIComponent(channelName)}`);
-    }
-
-    return redirect("/");
+    return new Response(
+      "<html><body><script>window.opener.postMessage('auth_complete', '*');window.close();</script></body></html>",
+      {
+        headers: { "Content-Type": "text/html" },
+      }
+    );
   } catch (error) {
     console.error("Auth callback error:", error);
     return redirect("/?error=internal_server_error");
