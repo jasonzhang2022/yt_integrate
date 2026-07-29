@@ -19,6 +19,7 @@ export async function loader() {
         headers: { "x-yt-jz-test": "1" },
       }
     );
+    console.log("Response Data:", response.data);
     return Response.json(response.data);
   } catch (error) {
     console.error("YouTube API Error:", error);

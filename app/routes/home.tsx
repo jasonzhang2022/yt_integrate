@@ -21,6 +21,7 @@ export async function loader({ request }: Route.LoaderArgs) {
         mine: true,
       });
       channels = response.data.items;
+      console.info(response)
     } catch (error) {
       console.error("Error fetching channels:", error);
     }

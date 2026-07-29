@@ -4,7 +4,7 @@ Basic flow to demonstrate how app cloud use YT V3 Data API
 
 
 # Step
-1. install nvm and node
+1. install nvm and node (you can follow Gemini instruction)
 1. Create a Cloud project
    1. Enable 'YouTube v3 Data API'
    1. Create an OAuth client ID
