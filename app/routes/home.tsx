@@ -14,7 +14,14 @@ export async function loader({ request }: Route.LoaderArgs) {
   let channels = null;
 
   if (oauth2Client.credentials && oauth2Client.credentials.access_token) {
-    const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+    const cookie = request.headers.get("cookie") || "";
+    const useSandbox = cookie.includes("useSandboxApi=true");
+
+    const youtube = google.youtube({
+      version: "v3",
+      auth: oauth2Client,
+      ...(useSandbox && { rootUrl: "https://autopush-youtube.sandbox.googleapis.com" })
+    });
     try {
       const response = await youtube.channels.list({
         part: ["snippet", "id"],

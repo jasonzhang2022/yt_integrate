@@ -1,13 +1,21 @@
+import { type LoaderFunctionArgs } from "react-router";
 import { google } from "googleapis";
 import { oauth2Client } from "./auth.callback";
 
-export async function loader() {
+export async function loader({ request }: LoaderFunctionArgs) {
   // Check if we have credentials (access token)
   if (!oauth2Client.credentials || !oauth2Client.credentials.access_token) {
     return Response.json({ error: "No access token available" }, { status: 401 });
   }
 
-  const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+  const cookie = request.headers.get("cookie") || "";
+  const useSandbox = cookie.includes("useSandboxApi=true");
+
+  const youtube = google.youtube({ 
+    version: "v3", 
+    auth: oauth2Client,
+    ...(useSandbox && { rootUrl: " https://autopush-youtube.sandbox.googleapis.com" })
+  });
 
   try {
     const response = await youtube.channelSections.list(

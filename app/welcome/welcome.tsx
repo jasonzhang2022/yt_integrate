@@ -7,6 +7,7 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
   const [playlists, setPlaylists] = useState<any>(null);
   const [useProdEndpoint, setUseProdEndpoint] = useState(true);
   const [enableYtPermissions, setEnableYtPermissions] = useState(false);
+  const [useSandboxApi, setUseSandboxApi] = useState(false);
 
 
 
@@ -14,6 +15,9 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
     // Check for error in URL query params
     const searchParams = new URLSearchParams(window.location.search);
     const error = searchParams.get("error");
+
+    // Initialize state from cookie on mount
+    setUseSandboxApi(document.cookie.includes("useSandboxApi=true"));
 
     if (error) {
       console.error("Auth error:", error);
@@ -97,6 +101,19 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
                   Channel Picker
+                </label>
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={useSandboxApi}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setUseSandboxApi(checked);
+                      document.cookie = `useSandboxApi=${checked}; path=/`;
+                    }}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  Use Sandbox YouTube API
                 </label>
               </div>
               <div className="flex w-full gap-2 justify-center">

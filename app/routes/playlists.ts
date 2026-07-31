@@ -14,7 +14,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return Response.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const youtube = google.youtube({ version: "v3", auth: oauth2Client });
+  const cookie = request.headers.get("cookie") || "";
+  const useSandbox = cookie.includes("useSandboxApi=true");
+
+  const youtube = google.youtube({ 
+    version: "v3", 
+    auth: oauth2Client,
+    ...(useSandbox && { rootUrl: " https://autopush-youtube.sandbox.googleapis.com" })
+  });
 
   try {
     const response = await youtube.playlists.list(
