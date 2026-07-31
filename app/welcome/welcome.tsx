@@ -5,6 +5,8 @@ import logoLight from "./logo-light.svg";
 export function Welcome({ channels, clientId }: { channels?: any[] | null; clientId?: string }) {
   const [channel, setChannel] = useState<string | null>(null);
   const [playlists, setPlaylists] = useState<any>(null);
+  const [useProdEndpoint, setUseProdEndpoint] = useState(true);
+  const [enableYtPermissions, setEnableYtPermissions] = useState(false);
 
 
 
@@ -77,13 +79,35 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
               ) : (
                 <p className="text-sm text-gray-500 dark:text-gray-400">No channel selected</p>
               )}
+              <div className="flex flex-col gap-2 w-full max-w-md my-2">
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={useProdEndpoint}
+                    onChange={(e) => setUseProdEndpoint(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  Use Prod Endpoint (uncheck for Autopush)
+                </label>
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={enableYtPermissions}
+                    onChange={(e) => setEnableYtPermissions(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  Channel Picker
+                </label>
+              </div>
               <div className="flex w-full gap-2 justify-center">
                 <button
                   onClick={() => {
                     const redirectUri = "http://localhost:5173/auth/google/callback";
                     const scope = "https://www.googleapis.com/auth/youtube.readonly";
-                    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&include_granted_scopes=true&state=state_parameter_passthrough_value&access_type=offline&prompt=consent`;
-                    
+                    const baseUrl = useProdEndpoint ? "https://accounts.google.com/o/oauth2/v2/auth" : "https://accounts.sandbox.google.com/o/oauth2/v2/auth";
+                    let authUrl = `${baseUrl}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&include_granted_scopes=true&state=state_parameter_passthrough_value&access_type=offline&prompt=consent`;
+                    if (enableYtPermissions) authUrl += "&enable_yt_permissions=true";
+                    console.log("Final Auth URL:", authUrl);
                     const width = 600;
                     const height = 700;
                     const left = window.screen.width / 2 - width / 2;
