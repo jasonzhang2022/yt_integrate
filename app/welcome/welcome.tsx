@@ -30,7 +30,14 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
       }
     };
     window.addEventListener("message", handleAuthMessage);
-    return () => window.removeEventListener("message", handleAuthMessage);
+    
+    const bc = new BroadcastChannel("auth_channel");
+    bc.onmessage = handleAuthMessage;
+
+    return () => {
+      window.removeEventListener("message", handleAuthMessage);
+      bc.close();
+    };
   }, []);
 
   return (
@@ -91,7 +98,7 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
                     onChange={(e) => setUseProdEndpoint(e.target.checked)}
                     className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                   />
-                  Use Prod Endpoint (uncheck for Autopush)
+                  Use Prod Authorization Endpoint (uncheck for Autopush)
                 </label>
                 <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer">
                   <input

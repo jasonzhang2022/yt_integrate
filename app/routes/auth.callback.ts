@@ -42,7 +42,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     console.log("Tokens saved in server memory");
 
     return new Response(
-      "<html><body><script>window.opener.postMessage('auth_complete', '*');window.close();</script></body></html>",
+      "<html><body><script>if (window.opener) { window.opener.postMessage('auth_complete', '*'); } new BroadcastChannel('auth_channel').postMessage('auth_complete'); window.close();</script></body></html>",
       {
         headers: { "Content-Type": "text/html" },
       }
