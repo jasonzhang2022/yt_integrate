@@ -41,12 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     
     console.log("Tokens saved in server memory");
 
-    return new Response(
-      "<html><body><script>if (window.opener) { window.opener.postMessage('auth_complete', '*'); } new BroadcastChannel('auth_channel').postMessage('auth_complete'); window.close();</script></body></html>",
-      {
-        headers: { "Content-Type": "text/html" },
-      }
-    );
+    return redirect("/");
   } catch (error) {
     console.error("Auth callback error:", error);
     return redirect("/?error=internal_server_error");

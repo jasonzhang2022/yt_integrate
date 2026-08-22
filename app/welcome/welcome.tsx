@@ -132,11 +132,7 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
                     let authUrl = `${baseUrl}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&include_granted_scopes=true&state=state_parameter_passthrough_value&access_type=offline&prompt=consent`;
                     if (enableYtPermissions) authUrl += "&enable_yt_permissions=true";
                     console.log("Final Auth URL:", authUrl);
-                    const width = 600;
-                    const height = 700;
-                    const left = window.screen.width / 2 - width / 2;
-                    const top = window.screen.height / 2 - height / 2;
-                    window.open(authUrl, "Google Auth", `width=${width},height=${height},top=${top},left=${left}`);
+                    window.location.href = authUrl;
                   }}
                   className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
                 >
@@ -163,7 +159,6 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
         <div className="playlists">
           {playlists && (
             <div className="rounded-3xl border border-gray-200 p-6 dark:border-gray-700 space-y-4 overflow-auto max-h-[400px] w-full max-w-[800px]">
-              <p className="leading-6 text-gray-700 dark:text-gray-200 font-semibold">Playlists for {channel}</p>
               {playlists.items && playlists.items.length > 0 ? (
                 <div className="w-full overflow-x-auto">
                   <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">

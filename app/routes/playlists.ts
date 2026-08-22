@@ -4,11 +4,6 @@ import { oauth2Client } from "./auth.callback";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
-  const channelId = url.searchParams.get("channelId");
-
-  if (!channelId) {
-    return Response.json({ error: "Missing channelId" }, { status: 400 });
-  }
 
   if (!oauth2Client.credentials || !oauth2Client.credentials.access_token) {
     return Response.json({ error: "Not authenticated" }, { status: 401 });
@@ -27,7 +22,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     const response = await youtube.playlists.list(
       {
         part: ["snippet", "contentDetails"],
-        channelId: channelId,
+        mine: true,
         maxResults: 25,
       }
     );
