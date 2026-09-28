@@ -7,6 +7,7 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
   const [playlists, setPlaylists] = useState<any>(null);
   const [useProdEndpoint, setUseProdEndpoint] = useState(true);
   const [enableYtPermissions, setEnableYtPermissions] = useState(false);
+  const [includeProfileScopes, setIncludeProfileScopes] = useState(false);
   const [useSandboxApi, setUseSandboxApi] = useState(false);
 
 
@@ -112,6 +113,15 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
                 <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer">
                   <input
                     type="checkbox"
+                    checked={includeProfileScopes}
+                    onChange={(e) => setIncludeProfileScopes(e.target.checked)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  />
+                  Request Email, Profile, OpenID & Drive
+                </label>
+                <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-200 cursor-pointer">
+                  <input
+                    type="checkbox"
                     checked={useSandboxApi}
                     onChange={(e) => {
                       const checked = e.target.checked;
@@ -127,7 +137,11 @@ export function Welcome({ channels, clientId }: { channels?: any[] | null; clien
                 <button
                   onClick={() => {
                     const redirectUri = "http://localhost:5173/auth/google/callback";
-                    const scope = "https://www.googleapis.com/auth/youtube.readonly";
+                    const scopes = ["https://www.googleapis.com/auth/youtube.readonly"];
+                    if (includeProfileScopes) {
+                      scopes.push("openid", "email", "profile", "https://www.googleapis.com/auth/drive");
+                    }
+                    const scope = scopes.join(" ");
                     const baseUrl = useProdEndpoint ? "https://accounts.google.com/o/oauth2/v2/auth" : "https://accounts.sandbox.google.com/o/oauth2/v2/auth";
                     let authUrl = `${baseUrl}?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&include_granted_scopes=true&state=state_parameter_passthrough_value&access_type=offline&prompt=consent`;
                     if (enableYtPermissions) authUrl += "&enable_yt_permissions=true";
